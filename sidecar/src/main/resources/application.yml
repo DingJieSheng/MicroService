@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: sidecar-textanalysis  #服务名
+server:
+  port: 8070
+eureka: #加入到eureka
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+sidecar:
+  port: 8060     #异构微服务的端口
+  health-uri: http://127.0.0.1:8060/health  #对应第三方程序的health接口
+
+zuul:
+    routes:
+      sidecar-textanalysis:
+         url: http://localhost:8060/

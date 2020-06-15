@@ -1,0 +1,69 @@
+server:
+  port: 8050
+
+spring:
+     application:
+       name: zuul-server
+zuul:
+#  为全局指定放行Cookie和Headers信息，也可以在每个路由里设置
+#  sensitiveHeaders: Cookie,Set-Cookie,Authorization
+  host:
+        connect-timeout-millis: 6000
+        socket-timeout-millis: 6000
+#  ribbon配置
+#  ribbon:
+#    eager-load:
+#      enabled: true
+
+#      忽略转发的url
+#  ignored-patterns: /**/hello/**
+  routes:
+    ignoredServices: "*"
+    sidecar-textanalysis:
+      path: /sidecar-textanalysis/*
+      serviceId: sidecar-textanalysis
+##      利用eureka的注册发现
+#    my-eureka:
+#      path: /eureka/**
+#      service-id: my-eureka
+#      #设置转发时不忽略path的前缀.把path的所有内容当转发路由，很有用！！！
+      stripPrefix: false
+##  配置eureka的服务器的地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+    # 表示eureka client间隔多久去拉取服务注册信息
+#    registry-fetch-interval-seconds: 5
+  instance:
+    instance_id: ${spring.cloud.client.hostname}:${server.port}:${spring.application.name}:@project.version@
+
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        timeout-in-milliseconds: 12000
+
+ribbon:  
+    ReadTimeout: 6000
+    ConnectTimeout: 6000
+    eureka:
+     enabled: true
+#hystrix.command.default.execution.timeout.enabled: true
+## hystrix的超时时间必须大于ribbon的超时时间
+#hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 600000
+## 开启重试
+#zuul.retryable: true
+#spring.cloud.loadbalancer.retry.enabled: true
+## 请求连接的超时时间
+#ribbon.connectTimeout: 20000
+## 请求处理的超时时间
+#ribbon.readTimeout: 30000
+## 对当前实例的重试次数
+#ribbon.maxAutoRetries: 1
+## 切换实例的重试次数
+#ribbon.maxAutoRetriesNextServer: 3
+## 对所有操作请求都进行重试
+#ribbon.okToRetryOnAllOperations: true
