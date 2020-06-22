@@ -1,6 +1,5 @@
 package com.sdj.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,7 +63,7 @@ public class TextAnalysisController {
 //	    }
 //        System.out.println("analysis");
         if (response.getStatusCode().is2xxSuccessful()) {
-        	Map<String, Integer> resultMap = new HashMap<>();
+//        	Map<String, Integer> resultMap = new HashMap<>();
         	JSONObject object = JSONObject.parseObject(response.getBody());
 //        	String resultString = response.getBody();
         	return Msg.success().add("resultMap", object);
@@ -74,86 +73,86 @@ public class TextAnalysisController {
 }
 
 
-class CustomResponseErrorHandler implements ResponseErrorHandler {
-
-  private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
-   @Override
-  public void handleError(ClientHttpResponse response) throws IOException {
-
-// 队请求头的处理
-    List<String> customHeader = response.getHeaders().get("x-app-err-id");
-
-    String svcErrorMessageID = "";
-    if (customHeader != null) {
-      svcErrorMessageID = customHeader.get(0);
-    }
-//对body 的处理 (inputStream)
-    String body = convertStreamToString(response.getBody());
-
-    try {
-
-      errorHandler.handleError(response);
-
-    } catch (RestClientException scx) {
-
-      throw new CustomException(scx.getMessage(), scx, body);
-    }
-  }
-   @Override
-  public boolean hasError(ClientHttpResponse response) throws IOException {
-    return errorHandler.hasError(response);
-  }
-
-// inputStream 装换为 string 
-  private String convertStreamToString(InputStream is) {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-    StringBuilder sb = new StringBuilder();
-
-    String line = null;
-    try {
-      while ((line = reader.readLine()) != null) {
-        sb.append(line);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      try {
-        is.close();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-
-    return sb.toString();
-  }
-}
-
-class CustomException extends RestClientException {
-
-  private RestClientException restClientException;
-  private String body;
-
-  public RestClientException getRestClientException() {
-    return restClientException;
-  }
-
-  public void setRestClientException(RestClientException restClientException) {
-    this.restClientException = restClientException;
-  }
-
-  public String getBody() {
-    return body;
-  }
-
-  public void setBody(String body) {
-    this.body = body;
-  }
-
-
-  public CustomException(String msg, RestClientException restClientException, String body) {
-    super(msg);
-    this.restClientException = restClientException;
-    this.body = body;
-  }
-
-}
+//class CustomResponseErrorHandler implements ResponseErrorHandler {
+//
+//  private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
+//   @Override
+//  public void handleError(ClientHttpResponse response) throws IOException {
+//
+//// 队请求头的处理
+//    List<String> customHeader = response.getHeaders().get("x-app-err-id");
+//
+//    String svcErrorMessageID = "";
+//    if (customHeader != null) {
+//      svcErrorMessageID = customHeader.get(0);
+//    }
+////对body 的处理 (inputStream)
+//    String body = convertStreamToString(response.getBody());
+//
+//    try {
+//
+//      errorHandler.handleError(response);
+//
+//    } catch (RestClientException scx) {
+//
+//      throw new CustomException(scx.getMessage(), scx, body);
+//    }
+//  }
+//   @Override
+//  public boolean hasError(ClientHttpResponse response) throws IOException {
+//    return errorHandler.hasError(response);
+//  }
+//
+//// inputStream 装换为 string 
+//  private String convertStreamToString(InputStream is) {
+//    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//    StringBuilder sb = new StringBuilder();
+//
+//    String line = null;
+//    try {
+//      while ((line = reader.readLine()) != null) {
+//        sb.append(line);
+//      }
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    } finally {
+//      try {
+//        is.close();
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+//    }
+//
+//    return sb.toString();
+//  }
+//}
+//
+//class CustomException extends RestClientException {
+//
+//  private RestClientException restClientException;
+//  private String body;
+//
+//  public RestClientException getRestClientException() {
+//    return restClientException;
+//  }
+//
+//  public void setRestClientException(RestClientException restClientException) {
+//    this.restClientException = restClientException;
+//  }
+//
+//  public String getBody() {
+//    return body;
+//  }
+//
+//  public void setBody(String body) {
+//    this.body = body;
+//  }
+//
+//
+//  public CustomException(String msg, RestClientException restClientException, String body) {
+//    super(msg);
+//    this.restClientException = restClientException;
+//    this.body = body;
+//  }
+//
+//}
